@@ -1,0 +1,22 @@
+class <%= controller_name %>RouteSchemer < ApplicationRouteSchemer
+<% methods.each do |method| %>
+  def self.<%= method %>_request_schema
+    {
+      # Example Request JSON schema for <%= method %>
+      type: "object",
+      required: [],
+      properties: {}
+    }
+  end
+
+  def self.<%= method %>_response_schema
+    {
+      # Example Response JSON schema for <%= method %>
+      type: "object",
+      required: [],
+      properties: {}
+    }
+  end
+
+<% end %>
+end

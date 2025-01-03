@@ -1,0 +1,6 @@
+class ApplicationRouteSchemer
+    # write your own custom configuration and formats for schema generation
+    # def fetch_schema_object(schema)
+    #     JSONSchemer.schema(schema)
+    # end
+end

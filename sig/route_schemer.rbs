@@ -1,0 +1,14 @@
+module RouteSchemer
+  VERSION: String
+  # See the writing guide of rbs: https://github.com/ruby/rbs#guides
+  def validated_params: (schema: Hash[untyped, untyped]?, params: Hash[untyped, untyped]?, request: bool) -> Hash[untyped, untyped]
+  def schema_for_current_action: (request: bool) -> Hash[untyped, untyped]?
+  def validate_request: (schema: Hash[untyped, untyped], data: Hash[untyped, untyped] | ActionController::Parameters) -> Hash[untyped, untyped]
+  def validate_response: (schema: Hash[untyped,untyped], data: Hash[untyped,untyped]) -> Hash[untyped,untyped]
+  def permitted_params: (schema: Hash[untyped, untyped], params: Hash[untyped, untyped] | ActionController::Parameters) -> Hash[untyped, untyped]
+  def get_permitted_fields: (schema: Hash[untyped, untyped]) -> Array[untyped]
+  def fetch_schema_object: (schema: Hash[untyped, untyped]) -> JSONSchemer::Schema
+
+  private
+  def check_for_error: -> nil
+end

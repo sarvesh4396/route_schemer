@@ -1,11 +1,11 @@
 name: Ruby
 
 on:
-  push:
-    branches:
-      - master
-
-  pull_request:
+  workflow_run:
+      workflows:
+        - Rubocop Auto Format
+      types:
+        - completed
 
 jobs:
   build:

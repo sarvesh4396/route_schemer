@@ -1,0 +1,45 @@
+name: Rubocop Auto Format
+
+on:
+  push:
+    branches:
+      - master
+    
+  pull_request:
+
+jobs:
+  rubocop:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Step 2: Set up Ruby
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.1  # Adjust to your project's Ruby version
+
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: |
+          gem install bundler
+          bundle install
+
+      # Step 4: Run Rubocop
+      - name: Run Rubocop
+        run: |
+          rubocop --autocorrect
+
+      # Step 5: Commit and push changes (if any)
+      - name: Commit and push changes
+        run: |
+          git config --local user.name "GitHub Actions"
+          git config --local user.email "actions@github.com"
+          git add .
+          git commit -m "Auto-format with Rubocop" || echo "No changes to commit"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

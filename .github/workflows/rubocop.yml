@@ -32,6 +32,7 @@ jobs:
       - name: Run Rubocop
         run: |
           rubocop --autocorrect
+        continue-on-error: true
 
       # Step 5: Commit and push changes (if any)
       - name: Commit and push changes

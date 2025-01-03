@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
   spec.description = "Validate your controller routes request and response schemas."
   spec.homepage = "https://www.github.com/sarvesh4396/route_schemer"
 
-  s.extra_rdoc_files = ['README.md', 'LICENSE']
+  spec.extra_rdoc_files = ['README.md', 'LICENSE']
   spec.required_ruby_version = ">= 3.0"
 
   spec.metadata["homepage_uri"] = spec.homepage

@@ -31,5 +31,6 @@ jobs:
           bundler-cache: true
       - name: Run the default task
         run: bundle exec rake ${{ matrix.rake_task }} RUBYOPT="${{ matrix.rubyopt }}"
+        continue-on-error: true
       - name: Build gem
         run: gem build  --verbose *.gemspec

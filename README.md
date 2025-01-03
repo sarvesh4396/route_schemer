@@ -1,6 +1,6 @@
 # RouteSchemer
  
-[![Gem Version](https://badge.fury.io/rb/route_schemer.svg)](https://badge.fury.io/rb/route_schemer) [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENCE)
+[![Gem Version](https://badge.fury.io/rb/route_schemer.svg)](https://badge.fury.io/rb/route_schemer) [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 
 **RouteSchemer** is a Ruby gem designed for Rails applications to streamline schema validation of requests and responses for API endpoints. It leverages `JSONSchemer` for validation against OpenAPI-style JSON schemas. This gem makes it easy to ensure that API payloads conform to predefined structures and simplifies error handling for mismatched data.
 
@@ -169,7 +169,7 @@ If you find this project helpful, consider starring the repository on GitHub to 
 
 ## 📜 License
 
-RouteSchemer is open-source software licensed under the MIT License.
+RouteSchemer is open-source software licensed under the [MIT License](./LICENSE).
 
 ---
 

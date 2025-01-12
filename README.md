@@ -61,25 +61,25 @@ Edit the generated `FooRouteSchemer` file to define a schema:
 ```ruby
 class FooRouteSchemer < ApplicationRouteSchemer
     def self.demo_request_schema
-        JSONSchemer.schema({
+        {
             type: "object",
             properties: {
                 name: { type: "string" },
                 age: { type: "integer" }
             },
             required: ["name", "age"]
-        })
+        }
     end
 
     def self.demo_response_schema
-        JSONSchemer.schema({
+        {
             type: "object",
             properties: {
                 success: { type: "boolean" },
                 message: { type: "string" }
             },
             required: ["success"]
-        })
+        }
     end
 end
 ```
@@ -163,7 +163,7 @@ If you would like to streamline and standardize commit messages, please give a t
 
 If you find this project helpful, consider starring the repository on GitHub to show your support!
 
-[![Star this repo](https://img.shields.io/github/stars/yourusername/route_schemer.svg?style=social)](https://github.com/sarvesh4396/route_schemer)
+[![Star this repo](https://img.shields.io/github/stars/sarvesh4396/route_schemer.svg?style=social)](https://github.com/sarvesh4396/route_schemer)
 
 ---
 

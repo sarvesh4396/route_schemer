@@ -4,6 +4,7 @@ require "json_schemer"
 require "active_support/concern"
 require "route_schemer/route_schemer"
 require "route_schemer/errors/request_schemer_error"
+require "route_schemer/type_coercion"
 
 # A module for JSON schema validation in Rails controllers.
 # Provides methods for validating request/response parameters against JSON schemas.

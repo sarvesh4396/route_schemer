@@ -22,22 +22,30 @@ class RouteSchemerGenerator < Rails::Generators::Base
   def validate_controller
     # Ensure controller_name is properly formatted (e.g., Foo or Foo::Bar)
     controller_path = File.join("app", "controllers", "#{controller_name.underscore}_controller.rb")
-    unless File.exist?(controller_path)
-      raise ArgumentError, "Controller #{controller_name} does not exist at #{controller_path}"
-    end
 
-    # Attempt to constantize the controller name
-    begin
-      @controller_class = "#{controller_name}Controller".constantize
-    rescue NameError
-      raise ArgumentError, "Controller class #{controller_name} could not be found. Ensure it is defined correctly."
-    end
-
-    # Validate each method in the controller class
-    methods.each do |method|
-      unless @controller_class.instance_methods.include?(method.to_sym)
-        raise ArgumentError, "Method #{method} is not defined in #{controller_name}"
+    # Make controller existence optional as mentioned in TODO
+    if File.exist?(controller_path)
+      # Attempt to constantize the controller name
+      begin
+        @controller_class = "#{controller_name}Controller".constantize
+      rescue NameError
+        say "Warning: Controller class #{controller_name}Controller could not be found. Proceeding with schema generation.",
+            :yellow
+        @controller_class = nil
       end
+
+      # Validate each method in the controller class if controller exists
+      if @controller_class && methods.any?
+        methods.each do |method|
+          unless @controller_class.instance_methods.include?(method.to_sym)
+            say "Warning: Method #{method} is not defined in #{controller_name}Controller", :yellow
+          end
+        end
+      end
+    else
+      say "Warning: Controller #{controller_name} does not exist at #{controller_path}. Proceeding with schema generation.",
+          :yellow
+      @controller_class = nil
     end
   end
 

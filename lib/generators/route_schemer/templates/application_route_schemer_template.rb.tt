@@ -1,6 +1,76 @@
 class ApplicationRouteSchemer
-    # write your own custom configuration and formats for schema generation
-    # def fetch_schema_object(schema)
-    #     JSONSchemer.schema(schema)
-    # end
+  # Base class for all route schemers
+  # You can customize schema creation and add global configurations here
+  
+  # Custom schema object creation (uncomment to override default behavior)
+  # def self.fetch_schema_object(schema)
+  #   JSONSchemer.schema(
+  #     schema,
+  #     # Add custom options here
+  #     # format: true,
+  #     # formats: {
+  #       # Add custom format validators
+  #       # "phone" => proc { |value| value.match?(/^\+?[1-9]\d{1,14}$/) }
+  #     # }
+  #   )
+  # end
+
+  # Common schema patterns you can reuse across controllers
+  
+  def self.id_schema
+    { type: "integer", minimum: 1 }
+  end
+
+  def self.email_schema
+    { type: "string", format: "email", maxLength: 255 }
+  end
+
+  def self.name_schema
+    { type: "string", minLength: 1, maxLength: 100 }
+  end
+
+  def self.timestamp_schema
+    { type: "string", format: "date-time" }
+  end
+
+  def self.pagination_schema
+    {
+      type: "object",
+      properties: {
+        page: { type: "integer", minimum: 1, default: 1 },
+        per_page: { type: "integer", minimum: 1, maximum: 100, default: 25 },
+        sort_by: { type: "string" },
+        sort_order: { type: "string", enum: ["asc", "desc"], default: "asc" }
+      },
+      additionalProperties: false
+    }
+  end
+
+  def self.error_response_schema
+    {
+      type: "object",
+      required: ["error"],
+      properties: {
+        error: { type: "string" },
+        details: {
+          type: "array",
+          items: { type: "string" }
+        }
+      },
+      additionalProperties: false
+    }
+  end
+
+  def self.success_response_schema(data_schema = {})
+    {
+      type: "object",
+      required: ["success"],
+      properties: {
+        success: { type: "boolean" },
+        message: { type: "string" },
+        data: data_schema
+      },
+      additionalProperties: false
+    }
+  end
 end

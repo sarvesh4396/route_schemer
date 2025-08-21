@@ -2,19 +2,53 @@ class <%= controller_name %>RouteSchemer < ApplicationRouteSchemer
 <% methods.each do |method| %>
   def self.<%= method %>_request_schema
     {
-      # Example Request JSON schema for <%= method %>
+      # JSON schema for <%= method %> request parameters
       type: "object",
       required: [],
-      properties: {}
+      properties: {
+        # Example: 
+        # name: { type: "string", minLength: 1, maxLength: 100 },
+        # age: { type: "integer", minimum: 0, maximum: 150 },
+        # email: { type: "string", format: "email" },
+        # created_at: { type: "string", format: "date-time" },
+        # settings: {
+        #   type: "object",
+        #   properties: {
+        #     notifications: { type: "boolean" },
+        #     theme: { type: "string", enum: ["light", "dark"] }
+        #   }
+        # },
+        # tags: {
+        #   type: "array",
+        #   items: { type: "string" }
+        # }
+      },
+      additionalProperties: false
     }
   end
 
   def self.<%= method %>_response_schema
     {
-      # Example Response JSON schema for <%= method %>
+      # JSON schema for <%= method %> response
       type: "object",
       required: [],
-      properties: {}
+      properties: {
+        # Example:
+        # success: { type: "boolean" },
+        # message: { type: "string" },
+        # data: {
+        #   type: "object",
+        #   properties: {
+        #     id: { type: "integer" },
+        #     name: { type: "string" }
+        #   }
+        # },
+        # errors: {
+        #   type: "array",
+        #   items: { type: "string" }
+        # }
+      },
+      additionalProperties: false
     }
   end
 

@@ -16,9 +16,16 @@ As a developer with a background in Python's FastAPI, I noticed a gap in the Rai
 
 - Automatically validate requests and responses against JSON schemas.
 - Supports nested controllers and complex schema structures.
-- Generates schema files for controllers using a Rails-like generator.
+- Generates schema files for controllers using a Rails-like generator -- even before the
+  controller itself exists.
 - Provides a simple API to access validated and filtered parameters.
-- Custom error handling for schema mismatches.
+- Custom, schema-defined error messages for validation failures.
+- Optional non-raising ("lenient") validation mode via `strict: false`.
+- Converts validated `date`/`date-time` request strings into real `Date`/`Time` objects.
+- Validate any `ActiveModel` (form objects, `ActiveRecord` models) against a schema via
+  `RouteSchemer::ActiveModelValidator`.
+- Generate an OpenAPI-style document straight from your existing schemas
+  (`rake route_schemer:swagger`).
 
 ---
 
@@ -137,14 +144,74 @@ class ApplicationController < ActionController::API
 end
 ```
 
+Give any property a custom `error_message` to override JSONSchemer's default wording -- see the
+[custom error messages guide](docs/guides/custom-error-messages.md).
+
+### Lenient Validation (`strict: false`)
+
+By default, invalid data raises. Pass `strict: false` to get the permitted data back without
+raising, and inspect `schema_errors` yourself -- see the [strict-mode guide](docs/guides/strict-mode.md).
+
+```ruby
+data = validated_params(strict: false)
+render json: { errors: schema_errors } if schema_errors.any?
+```
+
+### Date & Date-Time Parsing
+
+Properties declared with `format: "date"` or `format: "date-time"` come back as real
+`Date`/`Time` objects after a successful request validation -- see the
+[date-parsing guide](docs/guides/date-parsing.md).
+
+### ActiveModel Integration
+
+Validate any `ActiveModel` (form objects, `ActiveRecord` models) against a schema with
+`RouteSchemer::ActiveModelValidator` -- see the [ActiveModel guide](docs/guides/active-model.md).
+
+```ruby
+class SignupForm
+    include ActiveModel::Model
+    attr_accessor :email
+
+    validates_with RouteSchemer::ActiveModelValidator, schema: SignupRouteSchemer.create_request_schema
+end
+```
+
+### Swagger / OpenAPI Generation
+
+Turn your existing `RouteSchemer` classes into an OpenAPI-style document with
+`rake route_schemer:swagger` -- see the [Swagger generation guide](docs/guides/swagger-generation.md).
+
 ---
 
 ## 🧪 Testing
 
-To test a controller action with RouteSchemer, make a request with a valid or invalid payload and ensure that:
+RouteSchemer ships with its own RSpec suite covering the concern, the generator, the ActiveModel
+validator, and the swagger generator:
+
+```bash
+bundle exec rake       # runs the spec suite, then rubocop
+bundle exec rspec      # just the spec suite
+```
+
+To test a controller action that uses RouteSchemer in your own app, make a request with a valid
+or invalid payload and ensure that:
 
 - A valid payload is processed successfully.
 - An invalid payload triggers the appropriate error response.
+
+---
+
+## 📚 Guides
+
+Deeper guides for individual features live in [docs/guides](docs/guides):
+
+- [Strict vs. lenient validation](docs/guides/strict-mode.md)
+- [Custom error messages](docs/guides/custom-error-messages.md)
+- [Date & date-time parsing](docs/guides/date-parsing.md)
+- [ActiveModel integration](docs/guides/active-model.md)
+- [Swagger / OpenAPI generation](docs/guides/swagger-generation.md)
+- [Generating schemas ahead of the controller](docs/guides/generator.md)
 
 ---
 
@@ -183,15 +250,3 @@ Everyone interacting in the RouteSchemer project's codebases, issue trackers, ch
 
 - Thanks to the creators of `JSONSchemer` for powering the schema validation.
 - Inspired by Rails' generators and extensible architecture.
-
-## TODO
-- [ ] Parsing of date strings to objects after validating in request.
-- [ ] Add more comprehensive documentation with examples.
-- [ ] Provide detailed guides for common use cases and best practices.
-- [ ] Make controller existence optional, allowing generation even if the controller doesn't exist.
-- [ ] Explore support for `ActiveModel` to enhance schema validation using the Rails ecosystem.
-- [ ] Add support for custom error messages in schema validations.
-- [ ] Set up continuous integration and deployment pipelines.
-- [ ] Enhance test coverage and add more unit and integration tests.
-- [ ] Add auto integration to support swagger generation of present schemers.
-- [ ] Implement strict option as optional for schema validation so that schema validation passes but no errors.

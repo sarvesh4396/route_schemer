@@ -1,6 +1,10 @@
 AllCops:
   TargetRubyVersion: 3.0
 
+Metrics/BlockLength:
+  Exclude:
+    - "spec/**/*"
+
 Style/StringLiterals:
   EnforcedStyle: double_quotes
 
@@ -12,3 +16,6 @@ Metrics/MethodLength:
 
 Metrics/AbcSize:
   Max: 20
+
+Metrics/ModuleLength:
+  Max: 130

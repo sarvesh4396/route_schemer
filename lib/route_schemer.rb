@@ -4,6 +4,8 @@ require "json_schemer"
 require "active_support/concern"
 require "route_schemer/route_schemer"
 require "route_schemer/errors/request_schemer_error"
+require "route_schemer/active_model_validator"
+require "route_schemer/swagger_generator"
 
 # A module for JSON schema validation in Rails controllers.
 # Provides methods for validating request/response parameters against JSON schemas.
@@ -17,6 +19,10 @@ module RouteSchemer
       ActiveSupport.on_load(:action_controller_base) do
         include RouteSchemer
       end
+    end
+
+    rake_tasks do
+      load File.expand_path("tasks/route_schemer.rake", __dir__)
     end
   end
 end

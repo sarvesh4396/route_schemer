@@ -15,9 +15,13 @@ module RouteSchemer
       super(process_error(message))
     end
 
+    # Normalizes whatever message reaches the error -- a schema-defined `error_message`
+    # (see RouteSchemer#custom_error_message) or JSONSchemer's own default wording --
+    # into a single clean, presentable string.
+    # @param message [String] the raw message to normalize
+    # @return [String] the normalized message
     def process_error(message)
-      # TODO: format error message
-      message
+      message.to_s.strip.squish
     end
   end
 end

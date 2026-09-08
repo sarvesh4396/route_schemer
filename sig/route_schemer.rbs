@@ -1,14 +1,31 @@
 module RouteSchemer
   VERSION: String
   # See the writing guide of rbs: https://github.com/ruby/rbs#guides
-  def validated_params: (schema: Hash[untyped, untyped]?, params: Hash[untyped, untyped]?, request: bool) -> Hash[untyped, untyped]
-  def schema_for_current_action: (request: bool) -> Hash[untyped, untyped]?
-  def validate_request: (schema: Hash[untyped, untyped], data: Hash[untyped, untyped] | ActionController::Parameters) -> Hash[untyped, untyped]
-  def validate_response: (schema: Hash[untyped,untyped], data: Hash[untyped,untyped]) -> Hash[untyped,untyped]
-  def permitted_params: (schema: Hash[untyped, untyped], params: Hash[untyped, untyped] | ActionController::Parameters) -> Hash[untyped, untyped]
-  def get_permitted_fields: (schema: Hash[untyped, untyped]) -> Array[untyped]
-  def fetch_schema_object: (schema: Hash[untyped, untyped]) -> JSONSchemer::Schema
+  attr_reader schema_errors: Array[Hash[untyped, untyped]]?
+  def validated_params: (?schema: Hash[untyped, untyped]?, ?params: Hash[untyped, untyped]?, ?request: bool, ?permit: bool, ?strict: bool) -> Hash[untyped, untyped]
+  def schema_for_current_action: (bool request) -> Hash[untyped, untyped]?
+  def fetch_schema_object: (Hash[untyped, untyped] schema) -> JSONSchemer::Schema
 
   private
-  def check_for_error: -> nil
+  def validate_request: (Hash[untyped, untyped] schema, Hash[untyped, untyped] | ActionController::Parameters data, ?strict: bool) -> Hash[untyped, untyped]
+  def check_for_error: (JSONSchemer::Schema schemer, Hash[untyped, untyped] data, ?strict: bool) -> bool
+  def custom_error_message: (Hash[untyped, untyped] error) -> String?
+  def validate_response: (Hash[untyped, untyped] schema, Hash[untyped, untyped] data, ?strict: bool) -> Hash[untyped, untyped]
+  def permitted_params: (Hash[untyped, untyped] schema, Hash[untyped, untyped] | ActionController::Parameters params) -> Hash[untyped, untyped]
+  def get_permitted_fields: (Hash[untyped, untyped] schema) -> Array[untyped]
+  def parse_dates: (Hash[untyped, untyped] schema, Hash[untyped, untyped] data) -> Hash[untyped, untyped]
+
+  class RequestSchemerError < StandardError
+    attr_reader details: Array[Hash[untyped, untyped]]?
+    def initialize: (String message, ?Array[Hash[untyped, untyped]]? details) -> void
+  end
+
+  class ActiveModelValidator < ActiveModel::Validator
+    def validate: (untyped record) -> void
+  end
+
+  module SwaggerGenerator
+    def self.generate: (Array[Class] route_schemer_classes) -> Hash[String, untyped]
+    def self.generate_from_loaded_classes: () -> Hash[String, untyped]
+  end
 end

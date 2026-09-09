@@ -26,7 +26,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_dependency "json_schemer", "2.3.0"
-  spec.add_dependency "rails", ">= 6.0", "< 8.0"
+  spec.add_dependency "rails", ">= 6.0", "< 8.3"
   spec.add_runtime_dependency "stringio", ">= 3.1.0"
 
   spec.add_development_dependency "rake", "~> 13.0"

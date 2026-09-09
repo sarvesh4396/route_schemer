@@ -34,3 +34,18 @@ jobs:
         continue-on-error: true
       - name: Build gem
         run: gem build  --verbose *.gemspec
+
+  rails_8:
+    runs-on: ubuntu-latest
+    name: Rails 8
+    env:
+      RAILS_VERSION: "~> 8.1"
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Ruby 3.3
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+          bundler-cache: true
+      - name: Smoke load
+        run: bundle exec ruby -e 'require "rails"; require "route_schemer"; puts Rails.version; raise unless RouteSchemer::Engine < Rails::Engine'
